@@ -205,6 +205,38 @@
       font-size: 13px;
       color:#5a4b52;
     }
+    .polaroid{
+  background:#fff;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+  border:1px solid rgba(0,0,0,.06);
+  overflow:hidden;
+  display: flex;
+  flex-direction: column;   /* key: stack image + caption */
+}
+
+/* Image container */
+.shot{
+  width: 100%;
+  height: 220px;            /* controls image height */
+  overflow: hidden;
+}
+
+/* Image itself */
+.shot img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Caption BELOW image */
+.cap{
+  padding: 12px 14px 14px;
+  font-size: 13px;
+  color:#5a4b52;
+  background: #fff;
+}
 
     .doodle{
       width:64px; height:64px;
@@ -454,7 +486,7 @@
     <section class="card" id="card">
       <div class="top">
         <div class="title">
-          <h1>Anku has a important question for Simu 💘</h1>
+          <h1>Anku has a question for Simu 💘</h1>
         </div>
       </div>
 
@@ -462,65 +494,77 @@
         <div class="note">
           <h2>Dear Simu,</h2>
           <p>
-            If love was a webpage, you’d be the part that loads instantly and makes everything prettier.
+            <br>
+            We are going to be in NYYYYYYYYYYYCCC spending amazing time togehter.
+            We are going to have so much fun and eat good food, experience new places hehehe.
+            <br>
+                        <br>
+
+            *coughs in pain*
+            <br>
+
+            *coughs again*
+            <br>
+                        <br>
+
+            I think my vestibulocochlear nerve is damaged simu, because I keep falling for you.
+            <br>
+            *coughs dramatically one last time*
+            <br> When you fix my vestibulocochlear nerve, can you give me some Vitamin U too ;)  this valentines day??
+            <br>
+            <br>
+            hahahahha am i funny??
+            <br>
+            <br>
+            I have a very very very important question to ask my best friend.
+            <br>
+            <br>
+            <h3>Simu… will you be my Valentine? 💖</h3>
             <br/><br/>
-            So… will you be my Valentine? 🥺👉👈
+            
           </p>
         </div>
 
         <div class="polaroids">
           <div class="polaroid">
             <div class="shot">
-              <svg class="doodle" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M32 54s-18-10.6-24-22.6C3 20 10 10 22 12c5 1 8 5 10 8 2-3 5-7 10-8 12-2 19 8 14 19.4C50 43.4 32 54 32 54Z"
-                      fill="rgba(255,77,136,.35)" stroke="rgba(255,77,136,.75)" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M18 25c1-3 4-6 8-6" stroke="rgba(255,77,136,.75)" stroke-width="2" stroke-linecap="round"/>
-              </svg>
+                              <img src="./1.JPG">
+
             </div>
-            <div class="cap">📷 Placeholder: “Our cutest moment”</div>
+            <div class="cap">📷 Our cutest moment</div>
           </div>
 
           <div class="polaroid">
             <div class="shot">
-              <svg class="doodle" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M14 36c7 10 29 10 36 0" stroke="rgba(255,77,136,.75)" stroke-width="3" stroke-linecap="round"/>
-                <path d="M22 26c0 2-1 4-3 4s-3-2-3-4 1-4 3-4 3 2 3 4Z" fill="rgba(255,77,136,.35)"/>
-                <path d="M48 26c0 2-1 4-3 4s-3-2-3-4 1-4 3-4 3 2 3 4Z" fill="rgba(255,77,136,.35)"/>
-                <path d="M32 18l2 4 4 1-3 3 .6 4-3.6-2-3.6 2 .6-4-3-3 4-1 2-4Z"
-                      fill="rgba(255,77,136,.25)" stroke="rgba(255,77,136,.6)" stroke-width="1.5" stroke-linejoin="round"/>
-              </svg>
+                              <img src="./22.png">
+
             </div>
-            <div class="cap">✨ Placeholder: “When you made me smile”</div>
+            <div class="cap">✨When you made me smile</div>
           </div>
 
           <div class="polaroid">
             <div class="shot">
-              <svg class="doodle" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M20 46c0-10 6-18 12-18s12 8 12 18" stroke="rgba(255,77,136,.75)" stroke-width="3" stroke-linecap="round"/>
-                <path d="M22 46h20" stroke="rgba(255,77,136,.45)" stroke-width="3" stroke-linecap="round"/>
-                <path d="M26 20c2-6 10-6 12 0" stroke="rgba(255,77,136,.6)" stroke-width="3" stroke-linecap="round"/>
-              </svg>
+                              <img src="./3.JPG">
+
             </div>
-            <div class="cap">🫶 Placeholder: “Us being us”</div>
+            <div class="cap">🫶Us being us</div>
           </div>
 
           <div class="polaroid">
-            <div class="shot">
-              <svg class="doodle" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M18 22c6-8 22-8 28 0" stroke="rgba(255,77,136,.7)" stroke-width="3" stroke-linecap="round"/>
-                <path d="M16 30c8 10 24 10 32 0" stroke="rgba(255,77,136,.55)" stroke-width="3" stroke-linecap="round"/>
-                <path d="M24 40c5 6 11 6 16 0" stroke="rgba(255,77,136,.8)" stroke-width="3" stroke-linecap="round"/>
-              </svg>
+            <div class="shot" >
+                <img src="./4.JPG">
+   
             </div>
-            <div class="cap">🌸 Placeholder: “A soft lil memory”</div>
+           
+            <div class="cap">🌸A soft lil memory</div>
           </div>
-        </div>A
+        </div>
       </div>
 
       <div class="bottom">
         <div class="question">
           <div class="qtext">
-            <h3>Simu… will you be my Valentine? 💖</h3>
+            <!-- <h3>Simu… will you be my Valentine? 💖</h3> -->
 
             <div style="margin-top:14px;">
               <button class="btn yes" id="yesBtn">YES 💘</button>

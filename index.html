@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anku ➜ Simu 💌</title>
+
+  <style>
+    :root{
+      --bg1:#fff1f6;
+      --bg2:#ffe4ec;
+      --ink:#2b2b2b;
+      --muted:#6b5f66;
+      --card:#ffffffcc;
+      --pink:#ff4d88;
+      --pink2:#ff78a8;
+      --shadow: 0 20px 60px rgba(0,0,0,.08);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background:
+        radial-gradient(900px 600px at 15% 10%, #ffffff 0%, rgba(255,255,255,0) 60%),
+        radial-gradient(900px 600px at 85% 15%, #ffffff 0%, rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
+
+    /* floating hearts background */
+    .hearts{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.65;
+      filter: blur(.1px);
+      z-index: 0;
+    }
+    .heart{
+      position:absolute;
+      width:14px; height:14px;
+      transform: rotate(45deg);
+      background: rgba(255,77,136,.18);
+      border-radius: 4px;
+      animation: floatUp linear infinite;
+    }
+    .heart::before, .heart::after{
+      content:"";
+      position:absolute;
+      width:14px; height:14px;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .heart::before{ left:-7px; top:0; }
+    .heart::after{ top:-7px; left:0; }
+
+    @keyframes floatUp{
+      from{ transform: translateY(110vh) rotate(45deg) scale(.9); }
+      to{ transform: translateY(-20vh) rotate(45deg) scale(1.2); }
+    }
+
+    .wrap{
+      position:relative;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      z-index: 1;
+    }
+
+    .card{
+      width:min(880px, 96vw);
+      background: var(--card);
+      border: 1px solid rgba(255,77,136,.18);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      backdrop-filter: blur(10px);
+    }
+
+    .top{
+      padding:28px 28px 12px 28px;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:280px;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(26px, 3.2vw, 40px);
+      letter-spacing:-.02em;
+      line-height:1.05;
+    }
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size: 15px;
+      line-height:1.45;
+    }
+
+    .badge{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius: 999px;
+      background: rgba(255,77,136,.12);
+      border: 1px dashed rgba(255,77,136,.32);
+      color:#7a2a46;
+      font-size: 13px;
+      white-space:nowrap;
+    }
+    .badge b{ color:#5c1830; }
+
+    .mid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:18px;
+      padding: 12px 28px 22px 28px;
+    }
+    @media (max-width: 820px){
+      .mid{ grid-template-columns: 1fr; }
+    }
+
+    .note{
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 18px;
+      padding: 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .note::after{
+      content:"";
+      position:absolute;
+      inset:-40px -40px auto auto;
+      width:160px; height:160px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,77,136,.20), rgba(255,77,136,0) 70%);
+      transform: rotate(20deg);
+    }
+    .note h2{
+      margin:0 0 10px 0;
+      font-size: 18px;
+      letter-spacing:-.01em;
+      position:relative;
+      z-index:1;
+    }
+    .note p{
+      margin:0;
+      color:#3b3338;
+      line-height:1.55;
+      position:relative;
+      z-index:1;
+    }
+    .tiny{
+      margin-top:10px;
+      color:var(--muted);
+      font-size: 13px;
+      position:relative;
+      z-index:1;
+    }
+
+    .polaroids{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    .polaroid{
+      background:#fff;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+      border:1px solid rgba(0,0,0,.06);
+      overflow:hidden;
+      transform: rotate(var(--rot, -1deg));
+      position:relative;
+    }
+    .polaroid:nth-child(2){ --rot: 1.2deg; }
+    .polaroid:nth-child(3){ --rot: .6deg; }
+    .polaroid:nth-child(4){ --rot: -1.6deg; }
+
+    .shot{
+      height: 132px;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(120px 90px at 30% 35%, rgba(255,120,168,.35), transparent 70%),
+        radial-gradient(140px 100px at 70% 55%, rgba(255,77,136,.28), transparent 70%),
+        linear-gradient(135deg, #fff7fb, #ffe7f0);
+    }
+    .cap{
+      padding: 10px 12px 12px;
+      font-size: 13px;
+      color:#5a4b52;
+    }
+
+    .doodle{
+      width:64px; height:64px;
+      opacity:.9;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.08));
+    }
+
+    .bottom{
+      padding: 0 28px 28px 28px;
+      display:grid;
+      gap:14px;
+    }
+
+    .question{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .question .qtext{
+      min-width: 240px;
+      flex: 1 1 360px;
+    }
+    .question h3{
+      margin:0 0 6px 0;
+      font-size: 17px;
+      letter-spacing:-.01em;
+    }
+    .question p{
+      margin:0;
+      color:var(--muted);
+      font-size: 13px;
+      line-height:1.4;
+    }
+
+    .btn{
+      appearance:none;
+      border:none;
+      font-weight:900;
+      border-radius: 999px;
+      cursor:pointer;
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      user-select:none;
+      touch-action: manipulation;
+      letter-spacing: .01em;
+    }
+    .btn:active{ transform: scale(.98); }
+
+    .yes{
+      background: linear-gradient(135deg, var(--pink), var(--pink2));
+      color:#fff;
+      box-shadow: 0 14px 24px rgba(255,77,136,.25);
+      padding: 18px 30px;
+      font-size: 18px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+    }
+    .yes:hover{ filter: brightness(1.03); }
+
+    /* NO is free-roaming across the whole viewport */
+    .no{
+      background: rgba(255,255,255,.92);
+      color:#5a4b52;
+      border: 1px solid rgba(0,0,0,.10);
+      box-shadow: 0 10px 18px rgba(0,0,0,.10);
+      padding: 16px 26px;
+      font-size: 17px;
+      position: fixed;
+      left: 70vw;
+      top: 70vh;
+      z-index: 1000;
+    }
+
+    /* SIKE pop */
+    .sike{
+      position: fixed;
+      left: 50%;
+      top: 18%;
+      transform: translate(-50%, -50%) scale(.8);
+      font-weight: 1000;
+      letter-spacing: .04em;
+        font-size: clamp(80px, 12vw, 160px);
+      color: #ff2f7d;
+      text-shadow: 0 18px 40px rgba(255,47,125,.25);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 2600;
+    }
+    .sike.show{
+      opacity: 1;
+      animation: sikePop .65s ease-out both;
+    }
+    @keyframes sikePop{
+  0%   { transform: translate(-50%, -50%) scale(.3) rotate(-10deg); }
+  40%  { transform: translate(-50%, -50%) scale(1.3) rotate(6deg); }
+  70%  { transform: translate(-50%, -50%) scale(1.1) rotate(-3deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+
+    /* "no" modal */
+    .noOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(255,241,246,.75);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 2550;
+    }
+    .noOverlay.show{ display:flex; }
+
+    .noModal{
+      width: min(520px, 92vw);
+      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(255,77,136,.22);
+      box-shadow: 0 20px 60px rgba(0,0,0,.10);
+      border-radius: 22px;
+      padding: 18px 18px 16px;
+      position: relative;
+      text-align: center;
+    }
+    .noTitle{
+      font-size: 20px;
+      font-weight: 900;
+      color: #5c1830;
+      margin-top: 6px;
+    }
+    .noSub{
+      margin-top: 6px;
+      color: rgba(70,55,63,.75);
+      font-size: 14px;
+    }
+    .noClose{
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.8);
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    /* success overlay */
+    .overlay{
+      position:fixed; inset:0;
+      background: rgba(255,241,246,.85);
+      backdrop-filter: blur(10px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 24px;
+      z-index: 2000;
+    }
+    .overlay.show{ display:flex; }
+
+    .modal{
+      width:min(760px, 96vw);
+      background: rgba(255,255,255,.85);
+      border: 1px solid rgba(255,77,136,.22);
+      box-shadow: var(--shadow);
+      border-radius: 26px;
+      padding: 22px;
+      position:relative;
+      overflow:hidden;
+      text-align:center;
+    }
+    .modal h2{
+      margin: 6px 0 10px;
+      font-size: clamp(24px, 3vw, 34px);
+      letter-spacing:-.02em;
+    }
+    .modal p{
+      margin:0 auto;
+      max-width: 52ch;
+      color:#4b4046;
+      line-height:1.55;
+    }
+    .modal .minirow{
+      margin-top: 14px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .pill{
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,77,136,.12);
+      border: 1px solid rgba(255,77,136,.22);
+      font-weight: 650;
+      color:#6a1f3e;
+      font-size: 13px;
+    }
+
+    /* confetti bits */
+    .confetti{
+      position:fixed; inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index: 2500;
+      display:none;
+    }
+    .confetti.show{ display:block; }
+    .confetti i{
+      position:absolute;
+      width:10px; height:14px;
+      border-radius: 3px;
+      opacity:.9;
+      animation: drop 1.6s linear forwards;
+    }
+    @keyframes drop{
+      0%   { transform: translateY(-12vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(520deg); opacity: 0.95; }
+    }
+
+    .footer{
+      padding: 0 28px 20px;
+      color: rgba(70,55,63,.65);
+      font-size: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .spark{ color:#7a2a46; font-weight:700; }
+  </style>
+</head>
+
+<body>
+  <div class="hearts" aria-hidden="true" id="hearts"></div>
+
+  <main class="wrap">
+    <section class="card" id="card">
+      <div class="top">
+        <div class="title">
+          <h1>Anku has a important question for Simu 💘</h1>
+        </div>
+      </div>
+
+      <div class="mid">
+        <div class="note">
+          <h2>Dear Simu,</h2>
+          <p>
+            If love was a webpage, you’d be the part that loads instantly and makes everything prettier.
+            <br/><br/>
+            So… will you be my Valentine? 🥺👉👈
+          </p>
+        </div>
+
+        <div class="polaroids">
+          <div class="polaroid">
+            <div class="shot">
+              <svg class="doodle" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M32 54s-18-10.6-24-22.6C3 20 10 10 22 12c5 1 8 5 10 8 2-3 5-7 10-8 12-2 19 8 14 19.4C50 43.4 32 54 32 54Z"
+                      fill="rgba(255,77,136,.35)" stroke="rgba(255,77,136,.75)" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M18 25c1-3 4-6 8-6" stroke="rgba(255,77,136,.75)" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="cap">📷 Placeholder: “Our cutest moment”</div>
+          </div>
+
+          <div class="polaroid">
+            <div class="shot">
+              <svg class="doodle" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M14 36c7 10 29 10 36 0" stroke="rgba(255,77,136,.75)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M22 26c0 2-1 4-3 4s-3-2-3-4 1-4 3-4 3 2 3 4Z" fill="rgba(255,77,136,.35)"/>
+                <path d="M48 26c0 2-1 4-3 4s-3-2-3-4 1-4 3-4 3 2 3 4Z" fill="rgba(255,77,136,.35)"/>
+                <path d="M32 18l2 4 4 1-3 3 .6 4-3.6-2-3.6 2 .6-4-3-3 4-1 2-4Z"
+                      fill="rgba(255,77,136,.25)" stroke="rgba(255,77,136,.6)" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="cap">✨ Placeholder: “When you made me smile”</div>
+          </div>
+
+          <div class="polaroid">
+            <div class="shot">
+              <svg class="doodle" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20 46c0-10 6-18 12-18s12 8 12 18" stroke="rgba(255,77,136,.75)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M22 46h20" stroke="rgba(255,77,136,.45)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M26 20c2-6 10-6 12 0" stroke="rgba(255,77,136,.6)" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="cap">🫶 Placeholder: “Us being us”</div>
+          </div>
+
+          <div class="polaroid">
+            <div class="shot">
+              <svg class="doodle" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M18 22c6-8 22-8 28 0" stroke="rgba(255,77,136,.7)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M16 30c8 10 24 10 32 0" stroke="rgba(255,77,136,.55)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M24 40c5 6 11 6 16 0" stroke="rgba(255,77,136,.8)" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="cap">🌸 Placeholder: “A soft lil memory”</div>
+          </div>
+        </div>A
+      </div>
+
+      <div class="bottom">
+        <div class="question">
+          <div class="qtext">
+            <h3>Simu… will you be my Valentine? 💖</h3>
+
+            <div style="margin-top:14px;">
+              <button class="btn yes" id="yesBtn">YES 💘</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+      </div>
+    </section>
+  </main>
+
+  <!-- Free-roaming NO button (whole page) -->
+  <button class="btn no" id="noBtn" aria-label="No">no 🙈</button>
+
+  <!-- SIKE + "you cannot say no" modal -->
+  <div class="sike" id="sike">SIKEEEEEEE</div>
+
+  <div class="noOverlay" id="noOverlay" aria-hidden="true">
+    <div class="noModal" role="dialog" aria-modal="true" aria-label="No not allowed">
+      <button class="noClose" id="noClose" aria-label="Close">×</button>
+      <div class="noTitle">you cannot say no!!!! omgggg</div>
+    </div>
+  </div>
+
+  <!-- Success overlay -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="yayTitle">
+    <div class="modal">
+      <div style="font-size:34px; line-height:1;">💖🎉💖</div>
+      <h2 id="yayTitle">YAY! Simu said YES! 😭💘</h2>
+      <p>
+        Anku is now officially your Valentine.
+        Expect: extra compliments, surprise snacks, and aggressive hand-holding.
+      </p>
+      <div class="minirow">
+        <div class="pill">Date idea: coffee + walk</div>
+        <div class="pill">Bonus: cute pics</div>
+        <div class="pill">Risk: falling harder</div>
+      </div>
+      <div class="minirow" style="margin-top:16px;">
+        <button class="btn yes" onclick="closeOverlay()">okayyy 🥰</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script>
+    // -------------------------
+    // Background floating hearts
+    // -------------------------
+    const hearts = document.getElementById('hearts');
+    for (let i=0; i<28; i++){
+      const h = document.createElement('div');
+      h.className = 'heart';
+      const left = Math.random()*100;
+      const dur = 6 + Math.random()*10;
+      const delay = Math.random()*-dur;
+      const size = 10 + Math.random()*14;
+      h.style.left = left + 'vw';
+      h.style.animationDuration = dur + 's';
+      h.style.animationDelay = delay + 's';
+      h.style.width = size + 'px';
+      h.style.height = size + 'px';
+      hearts.appendChild(h);
+    }
+
+    // -------------------------
+    // Free roaming "NO" + SIKE
+    // -------------------------
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const overlay = document.getElementById('overlay');
+    const confetti = document.getElementById('confetti');
+
+    const sike = document.getElementById('sike');
+    const noOverlay = document.getElementById('noOverlay');
+    const noClose = document.getElementById('noClose');
+
+    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+    // Track pointer position and update NO with rAF (prevents weird "stuck" behavior)
+    let pointerX = window.innerWidth / 2;
+    let pointerY = window.innerHeight / 2;
+    let ticking = false;
+    let noDisabled = false; // if a modal is open, stop dodging for sanity
+
+    function dodge(){
+      ticking = false;
+      if (noDisabled) return;
+
+      const btn = noBtn.getBoundingClientRect();
+      const bx = btn.left + btn.width/2;
+      const by = btn.top + btn.height/2;
+
+      const dx = bx - pointerX;
+      const dy = by - pointerY;
+      const dist = Math.hypot(dx, dy) || 1;
+
+      const danger = 160;   // how close before it runs
+      if (dist < danger){
+        const jump = 260;   // how far it jumps
+        const nxCenter = bx + (dx/dist)*jump + (Math.random()*120 - 60);
+        const nyCenter = by + (dy/dist)*jump + (Math.random()*90 - 45);
+
+        const pad = 14;
+        const left = clamp(nxCenter - btn.width/2, pad, window.innerWidth - btn.width - pad);
+        const top  = clamp(nyCenter - btn.height/2, pad, window.innerHeight - btn.height - pad);
+
+        noBtn.style.left = left + 'px';
+        noBtn.style.top  = top + 'px';
+      }
+    }
+
+    function requestDodge(){
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(dodge);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      requestDodge();
+    });
+
+    window.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      pointerX = t.clientX;
+      pointerY = t.clientY;
+      requestDodge();
+    }, {passive:true});
+
+    window.addEventListener('touchmove', (e) => {
+      const t = e.touches[0];
+      pointerX = t.clientX;
+      pointerY = t.clientY;
+      requestDodge();
+    }, {passive:true});
+
+    // Init NO somewhere visible
+    function initNo(){
+      const pad = 14;
+      // temporarily set to get size
+      noBtn.style.left = (window.innerWidth*0.72) + 'px';
+      noBtn.style.top  = (window.innerHeight*0.72) + 'px';
+      const b = noBtn.getBoundingClientRect();
+      noBtn.style.left = clamp(window.innerWidth*0.72, pad, window.innerWidth - b.width - pad) + 'px';
+      noBtn.style.top  = clamp(window.innerHeight*0.72, pad, window.innerHeight - b.height - pad) + 'px';
+    }
+    initNo();
+
+    window.addEventListener('resize', () => {
+      // keep it on-screen after resize
+      const pad = 14;
+      const b = noBtn.getBoundingClientRect();
+      const left = clamp(b.left, pad, window.innerWidth - b.width - pad);
+      const top  = clamp(b.top,  pad, window.innerHeight - b.height - pad);
+      noBtn.style.left = left + 'px';
+      noBtn.style.top  = top + 'px';
+    });
+
+    // If keyboard focus ever lands on it, run
+    noBtn.addEventListener('focus', () => {
+      pointerX = window.innerWidth/2;
+      pointerY = window.innerHeight/2;
+      requestDodge();
+    });
+
+    // If she somehow clicks NO: SIKE + modal
+    function showSikeAndNoModal(){
+      noDisabled = true; // stop dodging while the modal is up
+
+      // SIKE pop (restart animation)
+      sike.classList.remove('show');
+      void sike.offsetWidth;
+      sike.classList.add('show');
+
+      setTimeout(() => {
+        noOverlay.classList.add('show');
+        noOverlay.setAttribute('aria-hidden', 'false');
+      }, 3000);
+
+      setTimeout(() => sike.classList.remove('show'), 3000);
+    }
+
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      showSikeAndNoModal();
+    });
+
+    function closeNoModal(){
+      noOverlay.classList.remove('show');
+      noOverlay.setAttribute('aria-hidden', 'true');
+      noDisabled = false;
+
+      // immediately make it dodge once so it doesn't sit under the cursor
+      requestDodge();
+    }
+
+    noClose.addEventListener('click', closeNoModal);
+    noOverlay.addEventListener('click', (e) => {
+      if (e.target === noOverlay) closeNoModal();
+    });
+
+    // -------------------------
+    // YES: overlay + confetti
+    // -------------------------
+    yesBtn.addEventListener('click', () => {
+      overlay.classList.add('show');
+      launchConfetti();
+    });
+
+    function closeOverlay(){
+      overlay.classList.remove('show');
+    }
+    window.closeOverlay = closeOverlay;
+
+    function launchConfetti(){
+      confetti.innerHTML = '';
+      confetti.classList.add('show');
+
+      const pieces = 120;
+      for (let i=0; i<pieces; i++){
+        const p = document.createElement('i');
+        const left = Math.random()*100;
+        const delay = Math.random()*0.25;
+        const dur = 1.2 + Math.random()*1.2;
+        const w = 6 + Math.random()*10;
+        const h = 8 + Math.random()*16;
+
+        const palette = [
+          'rgba(255,77,136,.95)',
+          'rgba(255,120,168,.95)',
+          'rgba(255,210,225,.95)',
+          'rgba(255,255,255,.95)',
+          'rgba(255,170,200,.95)'
+        ];
+        p.style.background = palette[Math.floor(Math.random()*palette.length)];
+        p.style.left = left + 'vw';
+        p.style.animationDelay = delay + 's';
+        p.style.animationDuration = dur + 's';
+        p.style.width = w + 'px';
+        p.style.height = h + 'px';
+        p.style.top = (-10 - Math.random()*30) + 'vh';
+
+        confetti.appendChild(p);
+      }
+
+      setTimeout(() => {
+        confetti.classList.remove('show');
+        confetti.innerHTML = '';
+      }, 2200);
+    }
+  </script>
+</body>
+</html>
